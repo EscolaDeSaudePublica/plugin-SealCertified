@@ -64,3 +64,9 @@
     padding: 10px;
     background: white;
 }
+
+.img-header {
+    flex: 1;
+    width: 90%;
+    margin: auto;
+}

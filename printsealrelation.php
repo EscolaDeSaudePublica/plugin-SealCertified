@@ -1,13 +1,8 @@
 <?php
 $plugin = $app->plugins['SealCertified'];
+$app->view->enqueueScript('app', 'sealcertified', '/js/seal-certified.js');
 ?>
-<style>
-    .img-header {
-        flex: 1;
-        width: 90%;
-        margin: auto;
-    }
-</style>
+
 <div class="center">
     <div  class="img-header">
     <img src="<?php $view->asset('img/meu-certificado--bg.jpg') ?>"/>
@@ -26,3 +21,4 @@ $plugin = $app->plugins['SealCertified'];
         </p>
     </div>
 </div>
+
