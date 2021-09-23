@@ -11,20 +11,6 @@
     $this->includeMapAssets();
     $this->includeAngularEntityAssets($relation);
 ?>
-<style>
-.display-seal-relation-esp {
-    flex: 1;
-}
-.seal-avatar-esp > a > img {
-    border: 1px solid #c3c3c3;
-    border-radius: 8px;
-}
-.agent-avatar-esp > a > img {
-    border: 1px solid #c3c3c3;
-    border-radius: 8px;
-    width: 50%;
-}
-</style>
 <article class="main-content seal">
     <!-- exibição dos avatares do selo e do agente -->
     <div class="display-seal-relation-esp">

@@ -1,3 +1,4 @@
+/* tutorial hacklab */
 #certificate--meu-certificado {
     width: 1250px;
     background-size: contain;
@@ -57,7 +58,7 @@
 #certificate--meu-certificado .footer div.footer-img > img {
     height: 82px;
 }
-
+/* DECLARAÇÃO ESP */
 .center {
     margin: auto;
     width: 60%;
@@ -69,4 +70,29 @@
     flex: 1;
     width: 90%;
     margin: auto;
+}
+
+.display-seal-relation-esp {
+    flex: 1;
+}
+.seal-avatar-esp > a > img {
+    border: 1px solid #c3c3c3;
+    border-radius: 8px;
+}
+.agent-avatar-esp > a > img {
+    border: 1px solid #c3c3c3;
+    border-radius: 8px;
+    width: 50%;
+}
+.display-seal-relation-esp {
+    flex: 1;
+}
+.seal-avatar-esp > a > img {
+    border: 1px solid #c3c3c3;
+    border-radius: 8px;
+}
+.agent-avatar-esp > a > img {
+    border: 1px solid #c3c3c3;
+    border-radius: 8px;
+    width: 50%;
 }
