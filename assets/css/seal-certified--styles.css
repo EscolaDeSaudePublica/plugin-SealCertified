@@ -91,6 +91,8 @@
     border: 1px solid #c3c3c3;
     border-radius: 8px;
     width: 50%;
+    float: right;
+    margin-right: 10px;
 }
 .agent-avatar-esp > a > img {
     border: 1px solid #c3c3c3;
