@@ -11,29 +11,16 @@
     $this->includeMapAssets();
     $this->includeAngularEntityAssets($relation);
 ?>
-<style>
-.display-seal-relation-esp {
-    flex: 1;
-}
-.seal-avatar-esp > a > img {
-    border: 1px solid #c3c3c3;
-    border-radius: 8px;
-}
-.agent-avatar-esp > a > img {
-    border: 1px solid #c3c3c3;
-    border-radius: 8px;
-    width: 50%;
-}
-</style>
+
 <article class="main-content seal">
     <!-- exibição dos avatares do selo e do agente -->
-    <div class="display-seal-relation-esp">
-        <div class="seal-avatar-esp">
+    <div class="row">
+        <div class="column seal-avatar-esp">
             <a href="<?php echo $seal->getSingleUrl(); ?>">
                 <?php $this->part('singles/avatar-seal-relation', ['entity' => $seal, 'size'=> 'avatarMedium', 'default_image' => 'img/avatar--seal.png']); ?>
             </a>
         </div>
-        <div class="agent-avatar-esp">
+        <div class="column agent-avatar-esp">
             <a href="<?php echo $relation->owner->getSingleUrl(); ?>" >
                 <?php $this->part('singles/avatar-seal-relation', ['entity' => $relation->owner, 'size'=> 'avatarMedium', 'default_image' => 'img/avatar--seal.png']); ?>
             </a>                    
@@ -42,11 +29,13 @@
         <div id="seal-info-container-esp">
             <div id="seal-name-esp">
                 <?php $this->applyTemplateHook('seal-name','before'); ?>
-                <h2>
-                    <span class="js-editable" data-edit="name" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Nome de exibição");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Nome de exibição");?>">
-                        <a href="<?php echo $app->createUrl('seal', 'single', ['id' => $seal->id])?>"><?php echo $seal->name; ?></a>
-                    </span>
-                </h2>
+                <div class="text-center">
+                    <h2>
+                        <span class="js-editable" data-edit="name" data-original-title="<?php \MapasCulturais\i::esc_attr_e("Nome de exibição");?>" data-emptytext="<?php \MapasCulturais\i::esc_attr_e("Nome de exibição");?>">
+                            <a href="<?php echo $app->createUrl('seal', 'single', ['id' => $seal->id])?>"><?php echo $seal->name; ?></a>
+                        </span>
+                    </h2>
+                </div>
                 <?php $this->applyTemplateHook('seal-name','after'); ?>
             </div>
             <div id="agent-name">
@@ -61,7 +50,7 @@
              <!--print seal relation -->
              <?php $this->applyTemplateHook('print-certificate','before'); ?>
             <div id="seal-print-container">
-                <?php //echo $printSeal ?>
+                <?php echo $printSeal ?>
 
                 <?php //$this->part('seal-model--printCertificate--esp', ['relation' => $relation]); ?>
             </div>

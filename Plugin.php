@@ -28,7 +28,9 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
         $app = App::i();
         $data = $this->getModelData();
 
-        $app->hook('template(seal.sealrelation.print-certificate):after', function($relation) use($app){
+        $app->hook('template(seal.sealrelation.print-certificate):after', function($relation) use($app, $data){
+            //Adicionando arquivos de estilo
+            $app->view->enqueueStyle('app', $data['name'], 'css/' . $data['css']);
             
             if($app->isEnabled('seals') && 
                 $relation->seal->seal_model &&
