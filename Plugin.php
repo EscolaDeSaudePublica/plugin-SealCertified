@@ -55,6 +55,9 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             $seal->save(true);
 
             }
+        $app->hook('template(seal.sealrelation.print-certificate):after', function($relation) use($app, $data){
+            //Adicionando arquivos de estilo
+            $app->view->enqueueStyle('app', $data['name'], 'css/' . $data['css']);
             
         });
 
