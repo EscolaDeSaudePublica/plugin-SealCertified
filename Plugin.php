@@ -37,31 +37,21 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
         $data = $this->getModelData();
         $plugin = $this;
         $plugin->enqueueAssets();
+    
 
-        $app->hook('POST(seal.saveSignatureNames)', function($relation) use($app, $plugin){
-
-            if (
-                $app->isEnabled('seals') &&
-                $relation->seal->seal_model &&
-                !$app->user->is('guest') &&
-                ($app->user->is('superAdmin') ||
-                    $app->user->is('admin') ||
-                    $app->user->profile->id == $relation->owner->id)
-            ) {
+        $app->hook('POST(seal.saveSignatureNames)', function() use($app, $plugin){
 
             $seal = $app->repo('Seal')->find(['id'=>$this->data['id']]);
             $seal->name_sealcertifiedone = $this->data['signature_one'];
             $seal->name_sealcertifiedtwo = $this->data['signature_two'];
             $seal->save(true);
-
-            }
-        $app->hook('template(seal.sealrelation.print-certificate):after', function($relation) use($app, $data){
-            //Adicionando arquivos de estilo
-            $app->view->enqueueStyle('app', $data['name'], 'css/' . $data['css']);
             
         });
 
-        $app->hook('template(seal.sealrelation.print-certificate):after', function ($relation) use ($app) {
+        $app->hook('template(seal.sealrelation.print-certificate):after', function ($relation) use ($app, $data) {
+
+            //Adicionando arquivos de estilo
+            $app->view->enqueueStyle('app', $data['name'], 'css/' . $data['css']);
 
             if (
                 $app->isEnabled('seals') &&
