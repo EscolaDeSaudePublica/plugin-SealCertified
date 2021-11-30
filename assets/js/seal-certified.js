@@ -1,3 +1,41 @@
 $(document).ready(function () {
-    window.print();
+    //window.print();
+    var $form_one = $("#upload-sealcertifiedone");
+    $form_one.on('ajaxForm.success', function(evt, response){
+        location.reload();
+     });
+
+     var $form_two = $("#upload-sealcertifiedtwo");
+     $form_two.on('ajaxForm.success', function(evt, response){
+         location.reload();
+      });
+
+      $(".signature-input").blur(function(){
+        var timeout = null;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            var url = MapasCulturais.createUrl('seal', 'saveSignatureNames', [MapasCulturais.entity.id]);
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    signature_one: $("#name_sealcertifiedone").val(),
+                    signature_two: $("#name_sealcertifiedtwo").val(),
+                }
+            })
+            .done(function (data) {
+                MapasCulturais.Messages.success("Assinatura salva!");
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+            })
+            .fail(function (jqXHR, textStatus, msg) {
+                alert('Erro inesperado, fale com administrador.');
+            }); 
+            
+        }, 3000);
+    });
 });
+
+
+
