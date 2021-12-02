@@ -41,10 +41,61 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
 
         $app->hook('POST(seal.saveSignatureNames)', function() use($app, $plugin){
 
+            App::i()->log->debug(json_encode($this->data));
+
+
+            if (
+                $app->isEnabled('seals') &&
+                $this->requestedEntity->seal_model &&
+                !$app->user->is('guest') &&
+                ($app->user->is('superAdmin') ||
+                    $app->user->is('admin') ||
+                    $app->user->profile->id == $this->requestedEntity->owner->id)
+            ){
+        
+
             $seal = $app->repo('Seal')->find(['id'=>$this->data['id']]);
-            $seal->name_sealcertifiedone = $this->data['signature_one'];
-            $seal->name_sealcertifiedtwo = $this->data['signature_two'];
+
+            if(isset($this->data["signature_one"])){
+                $seal->name_sealcertifiedone = $this->data['signature_one'];
+            }
+
+            else{
+
+                $seal->name_sealcertifiedone = null;
+
+                $file_one = $this->requestedEntity->getFile('sealcertifiedone');
+
+                if(!empty($file_one)){
+
+                    $file_one->delete(true);
+
+                }
+            }
+           
+            if(isset($this->data["signature_two"])){
+                $seal->name_sealcertifiedtwo = $this->data['signature_two'];
+            }
+
+            else{
+
+                $seal->name_sealcertifiedtwo = null;
+
+                $file_two = $this->requestedEntity->getFile('sealcertifiedtwo');
+
+
+                if(!empty($file_two)){
+
+                    $file_two->delete(true);
+            
+                }
+            }
+
             $seal->save(true);
+            App::i()->log->debug(json_encode($this->requestedEntity->getFile("sealcertifiedone")));
+            App::i()->log->debug(json_encode($this->requestedEntity->getFile("sealcertifiedtwo")));
+            
+            }
             
         });
 

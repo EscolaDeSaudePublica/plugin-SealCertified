@@ -115,3 +115,138 @@
     text-align: center;
     margin-top: 10px;
 }
+
+.holder {
+    display: flex;
+    justify-content: right;
+}
+.imagem {
+  width: 200px;
+  margin: 10px;
+  position: relative;
+  text-align: center;
+}
+
+.seal-relation-shortdescription{
+margin-top: 24px;
+left: 24px;
+top: 88px;
+
+font-family: Arial;
+font-style: normal;
+font-weight: normal;
+font-size: 10px;
+line-height: 12px;
+text-align: center;
+
+/* Black 60 */
+
+color: rgba(0, 0, 0, 0.6);
+
+}
+
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.img-container {
+    text-align: center;
+    display: block;
+}
+
+.color-label-certified-title {
+    color: rgba(34, 34, 34, 0.623);
+    font-style: normal;
+    font-size: 14px;
+    line-height: 15px;
+    text-align: center;
+    letter-spacing: 0.5px;  
+    margin-top: 20px;
+}
+
+.color-label-certified {
+    color: rgba(34, 34, 34, 0.623);
+    font-style: normal;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: center;
+    letter-spacing: 0.5px;  
+    margin-top: 0px;
+}
+
+.seal-certifiedclass {
+    margin-top: 30px;
+    margin-bottom: 70px;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.info-link-certified {
+left: 24px;
+bottom: 76px;
+margin-bottom: 67px;
+
+font-family: Arial;
+font-style: normal;
+
+font-size: 10px;
+line-height: 7px;
+display: flex;
+align-items: center;
+
+/* Black 87 */
+
+color: rgba(0, 0, 0, 0.87);
+}
+
+.link-selo-certified {
+    position: absolute;
+    width: 235px;
+    height: 9px;
+    left: 24px;
+    bottom: 64px;
+    font-family: Arial;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 9px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.87);
+}
+.footer {
+    margin-bottom: 30mm;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+.footer img {
+    width: 100%;
+    height: 100px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    object-fit: cover; /* classe pra deixar a imagem com a proporção correta e não ficar achatada */
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.td-format{
+    width: 30%;
+}
+
+.assinatura-certified {
+    text-align: center;
+    padding: 10px;
+}

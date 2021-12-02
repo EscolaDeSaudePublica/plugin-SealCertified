@@ -17,17 +17,26 @@ $template = '
     </div>
 </li>';
 ?>
+
+<div>
 <p>Selecione a imagem de sua segunda assinatura (arquivo em .png):</p> <br>
 
-        <img class="img-signature js-sealcertifiedtwo-img " src="<?= $file_two->url ?>" style="width: 200px !important;
+<?php if($file_two !== null): 
+$verified_two = $file_two->url;
+if(!empty($verified_two)): ?>
+<img class="img-signature js-sealcertifiedtwo-img " src="<?= $file_two->url ?>" style="width: 200px !important;
     height: 60px !important;" />
-        <div>
-            <button class="btn btn-default add js-open-editbox hltip" data-target="#editbox-sealcertifiedtwo-file" href="#" title="Clique para adicionar e subir novo arquivo de validação de assinatura"> Carregar assinatura </button>
-        </div>
+<?php endif; ?>
+<?php endif; ?>
+<div>
+    <button class="btn btn-default add js-open-editbox hltip" data-target="#editbox-sealcertifiedtwo-file" href="#" title="Clique para adicionar e subir novo arquivo de validação de assinatura"> Carregar assinatura </button>
+</div>
 
-        <div id="editbox-sealcertifiedtwo-file" class="js-editbox mc-left" title="Subir arquivo de assinatura" data-submit-label="<?= i::__("Enviar") ?>">
-            <?php $this->ajaxUploader($entity, "sealcertifiedtwo", "image-src", "ul.js-sealcertifiedtwo img.js-sealcertifiedtwo-img", $template, "", false, false, false); ?>
-        </div>
-        <label> Escreva o nome da segunda assinatura: </label><br>
-        <input name="name_sealcertifiedtwo" id="name_sealcertifiedtwo" type="text" class="signature-input" placeholder="Escreva o nome aqui" value="<?= $entity->name_sealcertifiedtwo ?? "" ?>" size="60" />
-        <hr>
+<div id="editbox-sealcertifiedtwo-file" class="js-editbox mc-left" title="Subir arquivo de assinatura" data-submit-label="<?= i::__("Enviar") ?>">
+    <?php $this->ajaxUploader($entity, "sealcertifiedtwo", "image-src", "ul.js-sealcertifiedtwo img.js-sealcertifiedtwo-img", $template, "", false, false, false); ?>
+</div>
+<label> Escreva o nome da segunda assinatura: </label><br>
+<input name="name_sealcertifiedtwo" id="name_sealcertifiedtwo" type="text" class="signature-input" placeholder="Escreva o nome aqui" value="<?= $entity->name_sealcertifiedtwo ?? "" ?>" size="60" /><br>
+<button class="remove-signature btn btn-danger"><?php i::_e('remover assinatura') ?></button>
+<hr>
+</div>
