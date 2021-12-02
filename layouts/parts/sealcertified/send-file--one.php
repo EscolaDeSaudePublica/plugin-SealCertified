@@ -29,10 +29,10 @@ $template = '
 $verified_one = $file_one->url;
 if(!empty($verified_one)): ?>
 <img class="js-sealcertifiedone-img" src="<?= $file_one->url ?>"  style="width: 200px !important; height: 60px !important;" /><br>
+<?php endif; ?>
+<?php endif; ?>
     <button class="btn btn-default add js-open-editbox hltip" data-target="#editbox-sealcertifiedone-file" href="#" title="Clique para adicionar e subir novo arquivo de validação de assinatura"> Carregar assinatura </button>
 </div>
-<?php endif; ?>
-<?php endif; ?>
 
 <div id="editbox-sealcertifiedone-file" class="js-editbox mc-left" title="Subir arquivo de assinatura" data-submit-label="<?= i::__("Enviar") ?>">
     <?php $this->ajaxUploader($entity, "sealcertifiedone", "image-src", "ul.js-sealcertifiedone img.js-sealcertifiedone-img", $template, "", false, false, false); ?>
