@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    //window.print();
     var $form_one = $("#upload-sealcertifiedone");
     $form_one.on('ajaxForm.success', function (evt, response) {
         location.reload();

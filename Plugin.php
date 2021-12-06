@@ -40,13 +40,10 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
     
 
         $app->hook('POST(seal.saveSignatureNames)', function() use($app, $plugin){
-
             App::i()->log->debug(json_encode($this->data));
-
-
+            
             if (
                 $app->isEnabled('seals') &&
-                $this->requestedEntity->seal_model &&
                 !$app->user->is('guest') &&
                 ($app->user->is('superAdmin') ||
                     $app->user->is('admin') ||
@@ -58,9 +55,7 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
 
             if(isset($this->data["signature_one"])){
                 $seal->name_sealcertifiedone = $this->data['signature_one'];
-            }
-
-            else{
+            }else{
 
                 $seal->name_sealcertifiedone = null;
 
@@ -75,9 +70,7 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
            
             if(isset($this->data["signature_two"])){
                 $seal->name_sealcertifiedtwo = $this->data['signature_two'];
-            }
-
-            else{
+            }else{
 
                 $seal->name_sealcertifiedtwo = null;
 
@@ -92,15 +85,12 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             }
 
             $seal->save(true);
-            App::i()->log->debug(json_encode($this->requestedEntity->getFile("sealcertifiedone")));
-            App::i()->log->debug(json_encode($this->requestedEntity->getFile("sealcertifiedtwo")));
-            
             }
             
         });
 
         $app->hook('template(seal.sealrelation.print-certificate):after', function ($relation) use ($app, $data) {
-
+            
             //Adicionando arquivos de estilo
             $app->view->enqueueStyle('app', $data['name'], 'css/' . $data['css']);
 

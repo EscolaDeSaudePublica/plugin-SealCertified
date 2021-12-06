@@ -238,7 +238,6 @@ color: rgba(0, 0, 0, 0.87);
 body {
     width: 100%;
     height: 100%;
-    margin: 0;
     padding: 0;
 }
 
@@ -249,4 +248,16 @@ body {
 .assinatura-certified {
     text-align: center;
     padding: 10px;
+}
+
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.mrg-50-left {
+    margin-left: 50px;
+}
+
+.mrg-50-right {
+    margin-right: 50px;
 }
