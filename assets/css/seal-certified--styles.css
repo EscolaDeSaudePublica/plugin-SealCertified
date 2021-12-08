@@ -163,17 +163,19 @@ color: rgba(0, 0, 0, 0.6);
     line-height: 15px;
     text-align: center;
     letter-spacing: 0.5px;  
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .color-label-certified {
-    color: rgba(34, 34, 34, 0.623);
-    font-style: normal;
-    font-size: 12px;
-    line-height: 15px;
-    text-align: center;
-    letter-spacing: 0.5px;  
-    margin-top: 0px;
+left: 24px;
+top: 390px;
+
+font-family: Arial;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 15px;
+letter-spacing: 0.5px;
 }
 
 .seal-certifiedclass {
@@ -186,9 +188,10 @@ color: rgba(0, 0, 0, 0.6);
 }
 
 .info-link-certified {
+width: 200px;
+height: 14px;
 left: 24px;
-bottom: 76px;
-margin-bottom: 67px;
+bottom: 76px !important;
 
 font-family: Arial;
 font-style: normal;
@@ -197,10 +200,6 @@ font-size: 10px;
 line-height: 7px;
 display: flex;
 align-items: center;
-
-/* Black 87 */
-
-color: rgba(0, 0, 0, 0.87);
 }
 
 .link-selo-certified {
@@ -235,11 +234,6 @@ color: rgba(0, 0, 0, 0.87);
     object-fit: cover; /* classe pra deixar a imagem com a proporção correta e não ficar achatada */
 }
 
-body {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-}
 
 .td-format{
     width: 30%;
@@ -260,4 +254,10 @@ body {
 
 .mrg-50-right {
     margin-right: 50px;
+}
+
+.img-logo-esp{
+float: right;
+margin-right: 24px;
+
 }
