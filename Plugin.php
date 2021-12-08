@@ -8,6 +8,7 @@ use \MapasCulturais\Definitions\FileGroup;
 
 class Plugin extends \SealModelTab\SealModelTemplatePlugin
 {
+
     function __construct($config = [])
     {
         $config += [
@@ -30,6 +31,7 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
 
     public function _init()
     {
+        
         parent::_init();
 
 
@@ -37,7 +39,13 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
         $data = $this->getModelData();
         $plugin = $this;
         $plugin->enqueueAssets();
-    
+
+
+        $app->hook('sealRelation.certificateText', function(&$message, $sealRelation) use($plugin){
+
+            $message = $plugin->customCertificateText($sealRelation);
+            
+        });
 
         $app->hook('POST(seal.saveSignatureNames)', function() use($app, $plugin){
             App::i()->log->debug(json_encode($this->data));
@@ -138,7 +146,70 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             'type' => 'string',
             'private' => false,
         ]);
+
     }
+
+    public function customCertificateText($sealRelation, $addLinks = false){
+        
+        function generateLink($url, $texto){
+            return '<a href=' . $url . ' rel="noopener noreferrer"><i>' . $texto .'</i></a>';
+        }
+        
+        $app = App::i();
+        $mensagem = $sealRelation->seal->certificateText;
+        $entity = $sealRelation->seal;
+        $nomeSelo = $addLinks ? generateLink($app->createUrl('seal', 'single', ['id'=>$sealRelation->seal->id], 
+        $sealRelation->seal->name), $sealRelation->seal->name) : $sealRelation->seal->name;
+
+        $donoSelo = $addLinks ? generateLink($sealRelation->seal->owner->getSingleUrl(), 
+        $sealRelation->seal->owner->name) : $sealRelation->owner->name;
+
+        $nomeEntidade = $addLinks ? generateLink($sealRelation->owner->getSingleUrl(), 
+        $sealRelation->owner->nomeCompleto) : $sealRelation->owner->nomeCompleto;
+
+        $nomeCompleto = $addLinks ? generateLink($sealRelation->owner->getSingleUrl(), 
+        $sealRelation->owner->nomeCompleto) : $sealRelation->owner->nomeCompleto;
+
+
+        $dateInicio = $sealRelation->createTimestamp->format("d/m/Y");
+        $seloExpira = isset($expirationDate);
+        
+        
+        if($entity->validPeriod > 0){
+            $dateFim = $sealRelation->validateDate->format('d/m/Y');
+        }
+
+        $nomeEntidade = empty($nomeCompleto) ? $nomeEntidade : $nomeCompleto;
+
+        if(!empty($mensagem)){
+            $mensagem = str_replace("\t","&nbsp;&nbsp;&nbsp;&nbsp",$mensagem);
+            $mensagem = str_replace("[sealName]",$nomeSelo,$mensagem);
+            $mensagem = str_replace("[sealOwner]",$donoSelo,$mensagem);
+            $mensagem = str_replace("[sealShortDescription]",$sealRelation->seal->shortDescription,$mensagem);
+            $mensagem = str_replace("[sealRelationLink]",$app->createUrl('seal','printsealrelation',[$sealRelation->id]),$mensagem);
+            $mensagem = str_replace("[entityDefinition]",$sealRelation->owner->entityTypeLabel,$mensagem);
+            $mensagem = str_replace("[entityName]",$nomeEntidade,$mensagem);
+
+            if($entity->validPeriod > 0){
+                $mensagem = str_replace("[dateFin]",$dateFim,$mensagem);
+            }
+            
+            $mensagem = preg_replace('/\v+|\\\r\\\n/','<br/>',$mensagem);
+            
+        }
+        else{
+            $mensagem = '<p>' . \MapasCulturais\i::__('<b>Nome do Selo</b>') . ': ' . $nomeSelo .'</p>';
+            $mensagem = $mensagem . '<p>' . \MapasCulturais\i::__('<b>Dono do Selo</b>') . ': ' . $donoSelo . '</p>';
+            $mensagem = $mensagem . '<p>' . \MapasCulturais\i::__('<b>Descrição Curta</b>') . ': ' . $sealRelation->seal->shortDescription .'</p>';
+            $mensagem = $mensagem . '<p>' . \MapasCulturais\i::__('<b>Tipo de Entidade</b>') . ': ' . $sealRelation->owner->entityTypeLabel .'</p>';
+            $mensagem = $mensagem . '<p>' . \MapasCulturais\i::__('<b>Nome da Entidade</b>') . ': ' . $nomeEntidade .'</p>';
+            $mensagem = $mensagem . '<p>' . \MapasCulturais\i::__('<b>Data de Criação</b>') . ': ' . $dateInicio .'</p>';
+
+        }
+
+        return $mensagem;
+    }
+    
 
     public function enqueueAssets(){
         $app = App::i();
