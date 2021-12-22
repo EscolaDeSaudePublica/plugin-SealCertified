@@ -96,9 +96,10 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             }
             
         });
+        
 
         $app->hook('template(seal.sealrelation.print-certificate):after', function ($relation) use ($app, $data) {
-            
+           
             //Adicionando arquivos de estilo
             $app->view->enqueueStyle('app', $data['name'], 'css/' . $data['css']);
 
@@ -124,6 +125,17 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             $this->part('sealcertified/send-file--one', ['entity' => $entity]);
             $this->part('sealcertified/send-file--two', ['entity' => $entity]);
         });
+
+        $app->hook('template(seal.<<create|edit>>.selo-layout):begin', function () use ($app, $plugin) {
+            
+            $layouts = $app->repo('Term')->findBy(['taxonomy' => 'seal_layout']);
+            
+            $this->part('sealcertified/select-layout', ['selects' => $layouts]);
+          
+        });
+
+
+
     }
 
     public function register()
@@ -146,6 +158,8 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             'type' => 'string',
             'private' => false,
         ]);
+
+        $app->registerController('sealCertified', 'SealCertified\Controllers\Controller');
 
     }
 
@@ -215,4 +229,5 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
         $app = App::i();
         $app->view->enqueueScript('app', 'sealcertified', 'js/seal-certified.js', ['mapasculturais']);
     }
+
 }
