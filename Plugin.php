@@ -25,7 +25,7 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             'css' => 'seal-certified--styles.css',
             'js' => 'seal-certified.js',
             'background' => 'meu-certificado--bg.jpg',
-            'preview' => 'seal-certified--preview.jpg'
+            'preview' => 'sealcertified/seal-certified--preview.jpg'
         ];
     }
 
