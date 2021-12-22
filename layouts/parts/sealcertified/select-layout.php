@@ -1,9 +1,15 @@
 <div>
     <label for="">Layout</label>
-    <select name="" class="form-control" id="">
+    <select name="" class="form-control" id="layout_seal">
         <?php
+        $selected = '';
             foreach ($selects as $key => $value) {
-                echo '<option value="'.$value->id.'">'.$value->description.'</option>';
+                if($value->id == $layoutSeal->id) {
+                    $selected = 'selected';
+                }else{
+                    $selected = '';
+                }
+                echo '<option value="'.$value->id.'" >'.$value->description.'</option>';
             }
         ?>
     </select>

@@ -74,6 +74,23 @@ $(document).ready(function () {
         }
     
     });   
+
+    $("#layout_seal").change(function (e) { 
+        e.preventDefault();
+        //$("#layout_seal option:selected").removeAttr( "selected" );
+        console.log($("#layout_seal").val());
+        var idLayout = $("#layout_seal").val();
+        var idSeal = MapasCulturais.entity.id;
+        $.ajax({
+            type: "POST",
+            url: MapasCulturais.baseURL+'seal/saveLayout',
+            data: {id_layout: idLayout, id_seal: idSeal},
+            dataType: "json",
+            success: function (response) {
+                console.log(response)
+            }
+        });
+    });
 });
 
 

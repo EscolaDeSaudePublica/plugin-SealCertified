@@ -2,9 +2,10 @@
 
 namespace SealCertified;
 
-use Doctrine\ORM\Query\Expr\Func;
+use MapasCulturais\Entities\SealMeta;
 use \MapasCulturais\App;
 use \MapasCulturais\Definitions\FileGroup;
+
 
 class Plugin extends \SealModelTab\SealModelTemplatePlugin
 {
@@ -12,7 +13,10 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
     function __construct($config = [])
     {
         $config += [
-            'logo-site' => 'img/logo-saude.png'
+            'logo-site' => 'img/logo-saude.png',
+            'ids_enabled_seal' => [
+                7
+            ]
         ];
         parent::__construct($config);
     }
@@ -99,10 +103,16 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
         
 
         $app->hook('template(seal.sealrelation.print-certificate):after', function ($relation) use ($app, $data) {
-           
+            
             //Adicionando arquivos de estilo
             $app->view->enqueueStyle('app', $data['name'], 'css/' . $data['css']);
-
+            // $sealMeta = $app->repo('SealMeta')->findOneBy([
+            //     'key'   => 'seal_layout',
+            //     'owner' =>  $this->data['seal']->id
+            // ]);
+           
+            //CONSULTA O LAYOUT DE ACORDO COM O VALOR INSERIDO EM SEAL_META
+            //$layout = $app->repo('Term')->find($sealMeta->value);
             if (
                 $app->isEnabled('seals') &&
                 $relation->seal->seal_model &&
@@ -127,11 +137,42 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
         });
 
         $app->hook('template(seal.<<create|edit>>.selo-layout):begin', function () use ($app, $plugin) {
-            
+            //CONSULTA COM O SELO ATUAL
+            $sealMeta = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_layout',
+                'owner' =>  $this->data['entity']->id
+            ]);
+            //CONSULTA O LAYOUT DE ACORDO COM O VALOR INSERIDO EM SEAL_META
+            $layout = $app->repo('Term')->find($sealMeta->value);
+            //CONSULTANDO TODOS OS TEMPLATES
             $layouts = $app->repo('Term')->findBy(['taxonomy' => 'seal_layout']);
             
-            $this->part('sealcertified/select-layout', ['selects' => $layouts]);
+            $this->part('sealcertified/select-layout', ['selects' => $layouts, 'layoutSeal' => $layout]);
           
+        });
+
+        $app->hook('POST(seal.saveLayout)', function() use($app, $plugin){
+            //dump($this->data);
+            $seal = $app->repo('Seal')->find($this->data['id_seal']);
+            //CONSULTANDO PARA SABER SE TEM ALGUM LAYOUT CADASTRADO
+            $layoutSeal = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_layout',
+                'owner' =>  $this->data['id_seal']
+            ]);
+           
+            if($layoutSeal){
+                //EDITA O VALOR EXISTENTE
+                $layoutSeal->value = $this->data['id_layout'];
+                $layoutSeal->save(true);
+            }else{
+                $sealMeta = new SealMeta;
+                $sealMeta->key = 'seal_layout';
+                $sealMeta->value = $this->data['id_layout'];
+                $sealMeta->owner = $seal;
+                $app->em->persist($sealMeta);    
+                $app->em->flush();
+                $this->json(['title' => 'Sucesso', 'message' => 'Confirmado', 'type' => 'success', 'status' => 200], 200);
+            }
         });
 
 
