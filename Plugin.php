@@ -140,18 +140,24 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             $this->part('sealcertified/send-file--two', ['entity' => $entity]);
         });
 
-        $app->hook('template(seal.<<create|edit>>.selo-layout):begin', function () use ($app, $plugin) {
+        $app->hook('template(seal.<<create|edit>>.selo-layout):begin', function () use ($app, $plugin, $data) {
             //CONSULTA COM O SELO ATUAL
             $sealMeta = $app->repo('SealMeta')->findOneBy([
                 'key'   => 'seal_layout',
                 'owner' =>  $this->data['entity']->id
             ]);
-            //CONSULTA O LAYOUT DE ACORDO COM O VALOR INSERIDO EM SEAL_META
-            $layout = $app->repo('Term')->find($sealMeta->value);
+            
+            // LAYOUT PADRAO
+            $idLayout = 0;
+            // SE TIVER ALGUM RETORNO CONSULTA QUAL O LAYOUT PELO ID
+            if(!is_null($sealMeta)){
+                $idLayout = $sealMeta->value;
+            }
+            
             //CONSULTANDO TODOS OS TEMPLATES
             $layouts = $app->repo('Term')->findBy(['taxonomy' => 'seal_layout']);
-            
-            $this->part('sealcertified/select-layout', ['selects' => $layouts, 'layoutSeal' => $layout]);
+           
+            $this->part('sealcertified/select-layout', ['selects' => $layouts, 'layoutSeal' => $idLayout]);
           
         });
 
@@ -209,7 +215,7 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
     }
 
     public function customCertificateText($sealRelation, $addLinks = false){
-        
+     
         function generateLink($url, $texto){
             return '<a href=' . $url . ' rel="noopener noreferrer"><i>' . $texto .'</i></a>';
         }
