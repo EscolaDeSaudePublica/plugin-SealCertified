@@ -17,21 +17,25 @@ class Controller extends \MapasCulturais\Controller
 {
 
     function GET_gerarSelo() {
-        dump('gerarSelo');
-        dump($this->data);
         $data = $this->data;
         $app = App::i();
-        foreach ($data as $key => $value) {
-            dump($value);
-        }
+        $idLayout = $data[1];
         $relation = $app->repo('SealRelation')->find($this->data['id']);
       
-        $layout = $app->repo('SealMeta')->findBy([
-            'owner' => $relation->seal,
-            'key' => 'layout'
+        $term = $app->repo('Term')->findBy([
+            'taxonomy' => 'seal_layout'
         ]);
-        dump($layout);
-        dump($relation);
+        $id = 0;
+        $layout = '';
+        foreach ($term as $terms) {
+            if($idLayout == md5($terms->id) ){
+                $id = $terms->id;
+                $layout = $terms->term;
+            }
+        }
+        $this->render($layout, ['relation' => $relation]);
+        // dump($layout);
+        // dump($relation);
     }
 
     //Método para renderizar o template

@@ -106,13 +106,17 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             
             //Adicionando arquivos de estilo
             $app->view->enqueueStyle('app', $data['name'], 'css/' . $data['css']);
-            // $sealMeta = $app->repo('SealMeta')->findOneBy([
-            //     'key'   => 'seal_layout',
-            //     'owner' =>  $this->data['seal']->id
-            // ]);
-           
-            //CONSULTA O LAYOUT DE ACORDO COM O VALOR INSERIDO EM SEAL_META
-            //$layout = $app->repo('Term')->find($sealMeta->value);
+            // CONSULTANDO O LAYOUT EM SEAL_META    
+            $sealMeta = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_layout',
+                'owner' =>  $this->data['seal']->id
+            ]);
+            // LAYOUT PADRAO
+            $idLayout = 0;
+            // SE TIVER ALGUM RETORNO CONSULTA QUAL O LAYOUT PELO ID
+            if(!is_null($sealMeta)){
+                $idLayout = $sealMeta->value;
+            }
             if (
                 $app->isEnabled('seals') &&
                 $relation->seal->seal_model &&
@@ -122,7 +126,7 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
                     $app->user->profile->id == $relation->owner->id)
             ) {
 
-                $this->part('sealcertified/seal-model--printCertificate', ['relation' => $relation]);
+                $this->part('sealcertified/seal-model--printCertificate', ['relation' => $relation, 'idLayout' => $idLayout]);
             }
         });
 
