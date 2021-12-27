@@ -53,14 +53,18 @@ class Controller extends \MapasCulturais\Controller
         $content = $app->view->fetch($confMpdf['template']);
 
         $stylesheet = file_get_contents(PLUGINS_PATH.'SealCertified/assets/css/seal-certified--styles.css');
+        $footer = '<img src="'.PLUGINS_PATH.'SealCertified/assets/img/sealcertified/rodape.png'.'" style="width: 795px; heigh: 63px">';
+        $mpdf->SetHTMLFooter($footer);
+        $mpdf->SetHTMLFooter($footer, 'E');
+        $mpdf->writingHTMLfooter = true;
         $mpdf->AddPage('', // L - landscape, P - portrait 
                 '', '', '', '',
-                5, // margin_left
-                5, // margin right
+                0, // margin_left
+                0, // margin right
                 0, // margin top
-                20, // margin bottom
+                0, // margin bottom
                 0, // margin header
-                3
+               0
             ); // margin footer
         $mpdf->WriteHTML(ob_get_clean());
         $mpdf->WriteHTML($stylesheet,1);
