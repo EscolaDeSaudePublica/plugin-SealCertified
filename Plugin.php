@@ -29,21 +29,19 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             'css' => 'seal-certified--styles.css',
             'js' => 'seal-certified.js',
             'background' => 'meu-certificado--bg.jpg',
-            'preview' => 'sealcertified/seal-certified--preview.jpg'
+            'preview' => ''
         ];
     }
 
     public function _init()
     {
         
-        parent::_init();
-
+        parent::_init(); 
 
         $app = App::i();
         $data = $this->getModelData();
         $plugin = $this;
         $plugin->enqueueAssets();
-
 
         $app->hook('sealRelation.certificateText', function(&$message, $sealRelation) use($plugin){
 
@@ -161,19 +159,55 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
           
         });
 
+        //ADICIONANDO MAIS CODIGO AO HOOK EXISTENTE NO SealModelTab
+        $app->hook('GET(seal.sealModelPreview)', function() use($app, $plugin){
+            //NOME DO PLUGIN
+            $sealMeta = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_model',
+                'value' =>  $app->sealModels[0]['name']
+            ]);
+            //CONSULTADO DADOS DO SELO NO BANCO
+            $idLayout = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_layout',
+                'owner' =>  $sealMeta->owner->id
+            ]);
+            //NOME DO LAYOUT
+            $nameLayout = $plugin->getNameTamplate($idLayout->value);
+            //CODIGO PADRAO DO PLUGIN SealModelTab
+            $preview_name = $app->request->get('p');
+            $preview_url = '';
+            foreach ($app->sealModels as $v){
+                //SE OS NOMES FOREM IGUAIS, ADICIONAD O LAYOUT NA CONFIGURAÇAO NO INDICE preview
+                if ($v['name'] == $preview_name){
+                    $preview_url = isset($v['preview']) ? 'sealcertified/'.$nameLayout.'.png' : 'sealcertified/'.$nameLayout.'.png';
+                    break;
+                }
+            }
+            if ($preview_url)
+                $app->view->asset('img/'.$preview_url);
+            else
+                echo '';
+        });
+       
+
         $app->hook('POST(seal.saveLayout)', function() use($app, $plugin){
             //dump($this->data);
+            ini_set('display_errors' , true);
             $seal = $app->repo('Seal')->find($this->data['id_seal']);
             //CONSULTANDO PARA SABER SE TEM ALGUM LAYOUT CADASTRADO
             $layoutSeal = $app->repo('SealMeta')->findOneBy([
                 'key'   => 'seal_layout',
                 'owner' =>  $this->data['id_seal']
             ]);
-           
+            
             if($layoutSeal){
                 //EDITA O VALOR EXISTENTE
                 $layoutSeal->value = $this->data['id_layout'];
                 $layoutSeal->save(true);
+                $nameLayout = $plugin->getNameTamplate($layoutSeal->value);
+                $url = PLUGINS_PATH.'SealCertified/assets/img/sealcertified/';
+                $img = $app->view->asset('img/sealcertified/'.$nameLayout.'.png');
+                $this->json(['layout' => $nameLayout, 'url' => $url], 200);
             }else{
                 $sealMeta = new SealMeta;
                 $sealMeta->key = 'seal_layout';
@@ -181,12 +215,30 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
                 $sealMeta->owner = $seal;
                 $app->em->persist($sealMeta);    
                 $app->em->flush();
-                $this->json(['title' => 'Sucesso', 'message' => 'Confirmado', 'type' => 'success', 'status' => 200], 200);
+                $nameLayout = $plugin->getNameTamplate($sealMeta->value);
+                $this->json(['layout' => $nameLayout], 200);
             }
         });
 
 
-
+        $app->hook('GET(seal.layout)', function() use($app, $plugin){
+            $sealMeta = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_layout',
+                'owner' =>  $this->data['id']
+            ]);
+            $idLayout = 0;
+            // SE TIVER ALGUM RETORNO CONSULTA QUAL O LAYOUT PELO ID
+            if(!is_null($sealMeta)){
+                $idLayout = $sealMeta->value;
+            }
+            $nameLayout = $plugin->getNameTamplate($idLayout);
+            
+            if($nameLayout !== '') {
+                $this->json(['layout' => $nameLayout], 200);
+            }else{
+                $this->json(['layout' => ''], 200);
+            }
+        });
     }
 
     public function register()
@@ -275,10 +327,14 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
         return $mensagem;
     }
     
-
     public function enqueueAssets(){
         $app = App::i();
         $app->view->enqueueScript('app', 'sealcertified', 'js/seal-certified.js', ['mapasculturais']);
     }
 
+    public function getNameTamplate($id) {
+        $app = App::i();
+        $lay = $app->repo('Term')->find($id);
+        return $lay->term;
+    }
 }

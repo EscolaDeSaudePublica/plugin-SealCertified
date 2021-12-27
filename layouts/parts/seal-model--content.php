@@ -8,7 +8,7 @@
         <?php $this->applyTemplateHook('selo-layout','end'); ?>
         <p>Preview:</p>
         <p class="seal-model-preview">
-            <img src="">
+            <img  class="img-preview-sealcertified">
         </p>
     </div>
 </div>

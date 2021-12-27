@@ -10,7 +10,7 @@
                 }else{
                     $selected = '';
                 }
-                echo '<option value="'.$value->id.'" >'.$value->description.'</option>';
+                echo '<option value="'.$value->id.'" '.$selected.' >'.$value->description.'</option>';
             }
         ?>
     </select>

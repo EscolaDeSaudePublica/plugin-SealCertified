@@ -74,24 +74,26 @@ $(document).ready(function () {
         }
     
     });   
-
+    
     $("#layout_seal").change(function (e) { 
         e.preventDefault();
         //$("#layout_seal option:selected").removeAttr( "selected" );
         console.log($("#layout_seal").val());
         var idLayout = $("#layout_seal").val();
         var idSeal = MapasCulturais.entity.id;
+        $(".seal-model-preview > img").remove();
         $.ajax({
             type: "POST",
             url: MapasCulturais.baseURL+'seal/saveLayout',
             data: {id_layout: idLayout, id_seal: idSeal},
             dataType: "json",
             success: function (response) {
-                console.log(response)
+                //alterando a visualização com base na escolha
+                var img = MapasCulturais.assetURL + 'img/' + response.layout + '.png';
+                $(".seal-model-preview").append('<img class="img-preview-sealcertified" />');
+                $(".img-preview-sealcertified").attr('src', img);
             }
         });
     });
+
 });
-
-
-
