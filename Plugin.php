@@ -115,9 +115,10 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             if(!is_null($sealMeta)){
                 $idLayout = $sealMeta->value;
             }
+
             if (
                 $app->isEnabled('seals') &&
-                $relation->seal->seal_model &&
+                $relation->seal &&
                 !$app->user->is('guest') &&
                 ($app->user->is('superAdmin') ||
                     $app->user->is('admin') ||

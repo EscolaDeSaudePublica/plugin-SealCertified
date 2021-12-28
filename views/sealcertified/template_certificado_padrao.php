@@ -38,7 +38,7 @@ endif;
     <p  class="color-label-certified mrg-50-left mrg-50-right">
         <?php
             echo "<br/>";           
-            echo 'Fortaleza. '.SealCertified::dateToExtensive();
+            echo 'Fortaleza, '.SealCertified::dateToExtensive();
         ?>
     </p>
 </div>
