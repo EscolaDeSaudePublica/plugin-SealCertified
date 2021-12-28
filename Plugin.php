@@ -161,34 +161,34 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
         });
 
         //ADICIONANDO MAIS CODIGO AO HOOK EXISTENTE NO SealModelTab
-        // $app->hook('GET(seal.sealModelPreview)', function() use($app, $plugin){
-        //     //NOME DO PLUGIN
-        //     $sealMeta = $app->repo('SealMeta')->findOneBy([
-        //         'key'   => 'seal_model',
-        //         'value' =>  $app->sealModels[0]['name']
-        //     ]);
-        //     //CONSULTADO DADOS DO SELO NO BANCO
-        //     $idLayout = $app->repo('SealMeta')->findOneBy([
-        //         'key'   => 'seal_layout',
-        //         'owner' =>  $sealMeta->owner->id
-        //     ]);
-        //     //NOME DO LAYOUT
-        //     $nameLayout = $plugin->getNameTamplate($idLayout->value);
-        //     //CODIGO PADRAO DO PLUGIN SealModelTab
-        //     $preview_name = $app->request->get('p');
-        //     $preview_url = '';
-        //     foreach ($app->sealModels as $v){
-        //         //SE OS NOMES FOREM IGUAIS, ADICIONAD O LAYOUT NA CONFIGURAÇAO NO INDICE preview
-        //         if ($v['name'] == $preview_name){
-        //             $preview_url = isset($v['preview']) ? 'sealcertified/'.$nameLayout.'.png' : 'sealcertified/'.$nameLayout.'.png';
-        //             break;
-        //         }
-        //     }
-        //     if ($preview_url)
-        //         $app->view->asset('img/'.$preview_url);
-        //     else
-        //         echo '';
-        // });
+        $app->hook('GET(seal.sealModelPreview)', function() use($app, $plugin){
+            //NOME DO PLUGIN
+            $sealMeta = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_model',
+                'value' =>  $app->sealModels[0]['name']
+            ]);
+            //CONSULTADO DADOS DO SELO NO BANCO
+            $idLayout = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_layout',
+                'owner' =>  $sealMeta->owner->id
+            ]);
+            //NOME DO LAYOUT
+            $nameLayout = $plugin->getNameTamplate($idLayout->value);
+            //CODIGO PADRAO DO PLUGIN SealModelTab
+            $preview_name = $app->request->get('p');
+            $preview_url = '';
+            foreach ($app->sealModels as $v){
+                //SE OS NOMES FOREM IGUAIS, ADICIONAD O LAYOUT NA CONFIGURAÇAO NO INDICE preview
+                if ($v['name'] == $preview_name){
+                    $preview_url = isset($v['preview']) ? 'sealcertified/'.$nameLayout.'.png' : 'sealcertified/'.$nameLayout.'.png';
+                    break;
+                }
+            }
+            if ($preview_url)
+                $app->view->asset('img/'.$preview_url);
+            else
+                echo '';
+        });
        
 
         $app->hook('POST(seal.saveLayout)', function() use($app, $plugin){
