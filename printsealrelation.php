@@ -18,13 +18,21 @@ $mpdf = new Mpdf([
     $mpdf->SetTitle('Mapa da Saúde - Relatório');
     $stylesheet = file_get_contents(PLUGINS_PATH.'SealCertified/assets/css/seal-certified--styles.css');  
    
-include "sealCertified.php";
+include "sealCertifiedOficial.php";
 
-$footer = '<img src="'.PLUGINS_PATH.'SealCertified/assets/img/sealcertified/rodape.png'.'" style="width: 795px;">';
+//$footer = '<img src="'.PLUGINS_PATH.'SealCertified/assets/img/sealcertified/rodape.png'.'" style="width: 795px;">';
+
+$footer = '<img src="'.PLUGINS_PATH.'SealCertified/assets/img/sealcertified/rodapeOficial.png'.'" style="width: 795px;">';
+
+$header = '<div style="border-top: 32px solid #4CAF50; width: 547px; left: 20%; margin-left: 15%"></div>';
 
 $mpdf->SetHTMLFooter($footer);
 $mpdf->SetHTMLFooter($footer, 'E');
 $mpdf->writingHTMLfooter = true;
+
+$mpdf->SetHTMLHeader($header);
+$mpdf->SetHTMLHeader($header, 'E');
+$mpdf->writingHTMLheader = true;
 $mpdf->AddPage('', // L - landscape, P - portrait 
                 '', '', '', '',
                 0, // margin_left

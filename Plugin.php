@@ -2,9 +2,10 @@
 
 namespace SealCertified;
 
-use Doctrine\ORM\Query\Expr\Func;
+use MapasCulturais\Entities\SealMeta;
 use \MapasCulturais\App;
 use \MapasCulturais\Definitions\FileGroup;
+
 
 class Plugin extends \SealModelTab\SealModelTemplatePlugin
 {
@@ -12,7 +13,10 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
     function __construct($config = [])
     {
         $config += [
-            'logo-site' => 'img/logo-saude.png'
+            'logo-site' => 'img/logo-saude.png',
+            'ids_enabled_seal' => [
+                7
+            ]
         ];
         parent::__construct($config);
     }
@@ -25,21 +29,19 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             'css' => 'seal-certified--styles.css',
             'js' => 'seal-certified.js',
             'background' => 'meu-certificado--bg.jpg',
-            'preview' => 'seal-certified--preview.jpg'
+            'preview' => ''
         ];
     }
 
     public function _init()
     {
         
-        parent::_init();
-
+        parent::_init(); 
 
         $app = App::i();
         $data = $this->getModelData();
         $plugin = $this;
         $plugin->enqueueAssets();
-
 
         $app->hook('sealRelation.certificateText', function(&$message, $sealRelation) use($plugin){
 
@@ -96,12 +98,23 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             }
             
         });
+        
 
         $app->hook('template(seal.sealrelation.print-certificate):after', function ($relation) use ($app, $data) {
             
             //Adicionando arquivos de estilo
             $app->view->enqueueStyle('app', $data['name'], 'css/' . $data['css']);
-
+            // CONSULTANDO O LAYOUT EM SEAL_META    
+            $sealMeta = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_layout',
+                'owner' =>  $this->data['seal']->id
+            ]);
+            // LAYOUT PADRAO
+            $idLayout = 0;
+            // SE TIVER ALGUM RETORNO CONSULTA QUAL O LAYOUT PELO ID
+            if(!is_null($sealMeta)){
+                $idLayout = $sealMeta->value;
+            }
             if (
                 $app->isEnabled('seals') &&
                 $relation->seal->seal_model &&
@@ -111,7 +124,7 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
                     $app->user->profile->id == $relation->owner->id)
             ) {
 
-                $this->part('sealcertified/seal-model--printCertificate', ['relation' => $relation]);
+                $this->part('sealcertified/seal-model--printCertificate', ['relation' => $relation, 'idLayout' => $idLayout]);
             }
         });
 
@@ -123,6 +136,108 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
 
             $this->part('sealcertified/send-file--one', ['entity' => $entity]);
             $this->part('sealcertified/send-file--two', ['entity' => $entity]);
+        });
+
+        $app->hook('template(seal.<<create|edit>>.selo-layout):begin', function () use ($app, $plugin, $data) {
+            //CONSULTA COM O SELO ATUAL
+            $sealMeta = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_layout',
+                'owner' =>  $this->data['entity']->id
+            ]);
+            
+            // LAYOUT PADRAO
+            $idLayout = 0;
+            // SE TIVER ALGUM RETORNO CONSULTA QUAL O LAYOUT PELO ID
+            if(!is_null($sealMeta)){
+                $idLayout = $sealMeta->value;
+            }
+            
+            //CONSULTANDO TODOS OS TEMPLATES
+            $layouts = $app->repo('Term')->findBy(['taxonomy' => 'seal_layout']);
+           
+            $this->part('sealcertified/select-layout', ['selects' => $layouts, 'layoutSeal' => $idLayout]);
+          
+        });
+
+        //ADICIONANDO MAIS CODIGO AO HOOK EXISTENTE NO SealModelTab
+        $app->hook('GET(seal.sealModelPreview)', function() use($app, $plugin){
+            //NOME DO PLUGIN
+            $sealMeta = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_model',
+                'value' =>  $app->sealModels[0]['name']
+            ]);
+            //CONSULTADO DADOS DO SELO NO BANCO
+            $idLayout = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_layout',
+                'owner' =>  $sealMeta->owner->id
+            ]);
+            //NOME DO LAYOUT
+            $nameLayout = $plugin->getNameTamplate($idLayout->value);
+            //CODIGO PADRAO DO PLUGIN SealModelTab
+            $preview_name = $app->request->get('p');
+            $preview_url = '';
+            foreach ($app->sealModels as $v){
+                //SE OS NOMES FOREM IGUAIS, ADICIONAD O LAYOUT NA CONFIGURAÇAO NO INDICE preview
+                if ($v['name'] == $preview_name){
+                    $preview_url = isset($v['preview']) ? 'sealcertified/'.$nameLayout.'.png' : 'sealcertified/'.$nameLayout.'.png';
+                    break;
+                }
+            }
+            if ($preview_url)
+                $app->view->asset('img/'.$preview_url);
+            else
+                echo '';
+        });
+       
+
+        $app->hook('POST(seal.saveLayout)', function() use($app, $plugin){
+            //dump($this->data);
+            ini_set('display_errors' , true);
+            $seal = $app->repo('Seal')->find($this->data['id_seal']);
+            //CONSULTANDO PARA SABER SE TEM ALGUM LAYOUT CADASTRADO
+            $layoutSeal = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_layout',
+                'owner' =>  $this->data['id_seal']
+            ]);
+            
+            if($layoutSeal){
+                //EDITA O VALOR EXISTENTE
+                $layoutSeal->value = $this->data['id_layout'];
+                $layoutSeal->save(true);
+                $nameLayout = $plugin->getNameTamplate($layoutSeal->value);
+                $url = PLUGINS_PATH.'SealCertified/assets/img/sealcertified/';
+                $img = $app->view->asset('img/sealcertified/'.$nameLayout.'.png');
+                $this->json(['layout' => $nameLayout, 'url' => $url], 200);
+            }else{
+                $sealMeta = new SealMeta;
+                $sealMeta->key = 'seal_layout';
+                $sealMeta->value = $this->data['id_layout'];
+                $sealMeta->owner = $seal;
+                $app->em->persist($sealMeta);    
+                $app->em->flush();
+                $nameLayout = $plugin->getNameTamplate($sealMeta->value);
+                $this->json(['layout' => $nameLayout], 200);
+            }
+        });
+
+
+        $app->hook('GET(seal.layout)', function() use($app, $plugin){
+            $sealMeta = $app->repo('SealMeta')->findOneBy([
+                'key'   => 'seal_layout',
+                'owner' =>  $this->data['id']
+            ]);
+            $idLayout = 0;
+            // SE TIVER ALGUM RETORNO CONSULTA QUAL O LAYOUT PELO ID
+            if(!is_null($sealMeta)){
+                $idLayout = $sealMeta->value;
+            }
+            $nameLayout = $plugin->getNameTamplate($idLayout);
+            
+            if($nameLayout !== '') {
+                $this->json(['layout' => $nameLayout], 200);
+            }else{
+                $this->json(['layout' => ''], 200);
+            }
         });
     }
 
@@ -147,10 +262,12 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             'private' => false,
         ]);
 
+        $app->registerController('sealCertified', 'SealCertified\Controllers\Controller');
+
     }
 
     public function customCertificateText($sealRelation, $addLinks = false){
-        
+     
         function generateLink($url, $texto){
             return '<a href=' . $url . ' rel="noopener noreferrer"><i>' . $texto .'</i></a>';
         }
@@ -210,9 +327,14 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
         return $mensagem;
     }
     
-
     public function enqueueAssets(){
         $app = App::i();
         $app->view->enqueueScript('app', 'sealcertified', 'js/seal-certified.js', ['mapasculturais']);
+    }
+
+    public function getNameTamplate($id) {
+        $app = App::i();
+        $lay = $app->repo('Term')->find($id);
+        return $lay->term;
     }
 }
