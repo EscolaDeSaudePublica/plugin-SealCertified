@@ -10,7 +10,9 @@ $style = $app->view->enqueueStyle('app', 'sealcertified', 'css/seal-certified--s
 $relation = $app->view->relObject['relation'];
 $message = $plugin->customCertificateText($relation);
 
- $this->part('sealcertified/headerOficial');
+$this->part('sealcertified/headerOficial');
+// URL DE LINK DE VALIDAÇÃO - MESMA URL
+$url = $app->view->relObject['url'];
 
 ?>
 <div class="container img-container">
@@ -40,7 +42,7 @@ $message = $plugin->customCertificateText($relation);
     <p>
         Acesse o link para acessar o comprovante desta declaração:
         <label for="">
-            <a href="<?php echo $app->createUrl('seal', 'printsealrelation', [$relation->id]); ?>"
+            <a href="<?php echo $url; ?>"
                 class="sealcertified-link">
                 <?php echo $app->createUrl('seal', 'printsealrelation', [$relation->id]); ?>
             </a>
