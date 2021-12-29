@@ -14,6 +14,7 @@ class Controller extends \MapasCulturais\Controller
     function GET_gerarSelo() {
         ini_set('display_errors' , true);
         $data = $this->data;
+        
         $app = App::i();
         $idLayout = $data[1];
         $relation = $app->repo('SealRelation')->find($this->data['id']);
@@ -46,9 +47,12 @@ class Controller extends \MapasCulturais\Controller
        
         $mpdf = new Mpdf($confMpdf);
         ob_start();
+        //FORMANDO A URL DO LINK NO PDF
+        $urlValidade = $app->config['base.url'].'sealCertified/gerarSelo/'.$data['id'].'/'.$data[0].'/'.$data[1];
          //INSTANCIA DO TIPO ARRAY OBJETO
          $app->view->relObject = new \ArrayObject;
          $app->view->relObject['relation'] = $relation;
+         $app->view->relObject['url'] = $urlValidade;
 
         $content = $app->view->fetch($confMpdf['template']);
 
@@ -68,6 +72,7 @@ class Controller extends \MapasCulturais\Controller
             ); // margin footer
         $mpdf->WriteHTML(ob_get_clean());
         $mpdf->WriteHTML($stylesheet,1);
+
         $mpdf->WriteHTML($content,2);
         $file_name = 'Ficha_de_inscricao.pdf';
         $mpdf->Output();
