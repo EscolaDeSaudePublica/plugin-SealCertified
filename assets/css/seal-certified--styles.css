@@ -1,3 +1,7 @@
+body { 
+    font-family: helvetica; 
+}
+
 /* tutorial hacklab */
 #certificate--meu-certificado {
     width: 1250px;
@@ -67,9 +71,9 @@
 }
 
 .img-header {
-    flex: 1;
-    width: 90%;
-    margin: auto;
+    margin-top: 24px; 
+    margin-left: 123px; 
+    margin-right: 123px;
 }
 
 .row {
@@ -159,23 +163,23 @@ color: rgba(0, 0, 0, 0.6);
 .color-label-certified-title {
     color: rgba(34, 34, 34, 0.623);
     font-style: normal;
-    font-size: 14px;
-    line-height: 15px;
+    font-size: 24px;
+    line-height: 50px;
     text-align: center;
     letter-spacing: 0.5px;  
     margin-top: 30px;
 }
 
 .color-label-certified {
-left: 24px;
-top: 390px;
-
-font-family: Arial;
-font-style: normal;
-font-weight: normal;
-font-size: 14px;
-line-height: 15px;
-letter-spacing: 0.5px;
+    width: 634px;   
+    left: 80px;      
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 26px;
+    text-align: center;
+    letter-spacing: 0.5px;
 }
 
 .seal-certifiedclass {
@@ -183,23 +187,18 @@ letter-spacing: 0.5px;
     margin-bottom: 70px;
 }
 
-.text-left {
-    text-align: justify;
-}
-
 .info-link-certified {
-width: 200px;
-height: 14px;
-left: 24px;
-bottom: 76px !important;
-
-font-family: Arial;
-font-style: normal;
-
-font-size: 10px;
-line-height: 7px;
-display: flex;
-align-items: center;
+    width: 303px;
+    height: 11px;
+    
+    font-family: Arial;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 11px;
+    display: flex;
+    align-items: center;
+    
 }
 
 .link-selo-certified {
@@ -257,7 +256,31 @@ align-items: center;
 }
 
 .img-logo-esp{
-float: right;
-margin-right: 24px;
+    float: right;
+    margin-right: 24px;
+}
 
+.sealcertified-link {
+    color: rgba(0, 0, 0, 0.87);
+    font-weight: bold;
+}
+.sealcertified-accredited {
+    margin-top: 7px; 
+    margin-left: 80px; 
+    margin-right: 80px; 
+    text-align: center; 
+    font-size: 8px; 
+    color: #848282;
+}
+.sealcertified-img-green {
+    height: 32px;
+    margin-left: 123px; 
+    margin-right: 123px;
+}
+.sealcertified-div-link {
+    position: fixed; /* VERIFICAR SE ESTÁ ALTERANDO*/  
+    bottom:3cm; /* VERIFICAR SE ESTÁ ALTERANDO*/ 
+    margin-top: 173px; 
+    text-align: center; 
+    font-size: 10px;
 }
