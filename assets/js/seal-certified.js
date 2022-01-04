@@ -1,4 +1,8 @@
 $(document).ready(function () {
+    var countElement = document.querySelectorAll('#btn-print-certificate');
+    if(countElement.length > 1){
+        document.getElementById('btn-print-certificate').style.display = 'none';
+    }
     var $form_one = $("#upload-sealcertifiedone");
     $form_one.on('ajaxForm.success', function (evt, response) {
         location.reload();

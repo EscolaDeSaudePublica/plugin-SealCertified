@@ -64,7 +64,20 @@ class Controller extends \MapasCulturais\Controller
 
 
         $stylesheet = file_get_contents(PLUGINS_PATH.'SealCertified/assets/css/seal-certified--styles.css');
-        $footer = '<img src="'.PLUGINS_PATH.'SealCertified/assets/img/sealcertified/rodape.png'.'" style="width: 795px; heigh: 63px">';
+        $footer = '
+        <div class="sealcertified-div-link">
+            <p>Acesse o link do comprovante desta declaração: <a href='.$url.' class="sealcertified-link">'.$url.'</a></p>
+        </div>
+        <div class="sealcertified-accredited">
+            <p>
+                Credenciada para ministrar Cursos de Pós-Graduação Lato Sensu – Especialização, Parecer no 0454/2019, de
+                24/09/2019, expedido pela Câmara da Educação Superior e
+                Profissional do Conselho Estadual de Educação do Ceará – CEE, de acordo com o Inciso IV, do Artigo 10, da Lei
+                CNE/MEC no 9.394, de 20 de dezembro de 1996, que
+                Estabelece as Diretrizes e Bases da Educação Nacional.
+            </p>
+        </div>
+        <img src="'.PLUGINS_PATH.'SealCertified/assets/img/sealcertified/rodape.png'.'" style="width: 795px; heigh: 63px">';
         $mpdf->SetHTMLFooter($footer);
         $mpdf->SetHTMLFooter($footer, 'E');
         $mpdf->writingHTMLfooter = true;
