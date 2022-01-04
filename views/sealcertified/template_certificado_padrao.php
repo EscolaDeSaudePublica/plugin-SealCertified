@@ -27,10 +27,10 @@ $url = $app->view->relObject['url'];
             echo $message ;            
         } ?>
     </p>
-    <p class="color-label-certified mrg-50-left mrg-50-right">
+    <p class="color-label-certified">
         <?php
             echo "<br/>";           
-            echo 'Fortaleza, '.SealCertified::dateToExtensive();
+            echo 'Fortaleza, '.SealCertified::dateToExtensive().'.';
         ?>
     </p>
 </div>
