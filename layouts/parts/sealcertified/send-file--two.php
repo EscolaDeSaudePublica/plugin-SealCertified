@@ -36,7 +36,12 @@ if(!empty($verified_two)): ?>
     <?php $this->ajaxUploader($entity, "sealcertifiedtwo", "image-src", "ul.js-sealcertifiedtwo img.js-sealcertifiedtwo-img", $template, "", false, false, false); ?>
 </div>
 <label> Escreva o nome da segunda assinatura: </label><br>
-<input name="name_sealcertifiedtwo" id="name_sealcertifiedtwo" type="text" class="signature-input" placeholder="Escreva o nome aqui" value="<?= $entity->name_sealcertifiedtwo ?? "" ?>" size="60" /><br>
+<p>
+    <textarea id="name_sealcertifiedtwo" name="name_sealcertifiedtwo"
+        class="signature-input" 
+        rows="5" cols="33"><?php echo $entity->name_sealcertifiedtwo ?>
+    </textarea>
+</p>
 <button class="remove-signature btn btn-danger"><?php i::_e('remover assinatura') ?></button>
 <hr>
 </div>

@@ -3,7 +3,7 @@ require PLUGINS_PATH . 'SealCertified/Entities/SealCertified.php';
 use SealCertified\Entities\SealCertified;
 
 $this->layout = 'nolayout-pdf'; 
-require PLUGINS_PATH.'SealCertified/vendor/autoload.php';
+require PLUGINS_PATH.'PDFReport/vendor/autoload.php';
 $plugin = $app->plugins['SealCertified'];
 $style = $app->view->enqueueStyle('app', 'sealcertified', 'css/seal-certified--styles.css');
 
@@ -13,7 +13,6 @@ $message = $plugin->customCertificateText($relation);
 $this->part('sealcertified/headerOficial');
 // URL DE LINK DE VALIDAÇÃO - MESMA URL
 $url = $app->view->relObject['url'];
-
 ?>
 <div class="container img-container">
     <div style="margin-top: 48px">
@@ -40,11 +39,11 @@ $url = $app->view->relObject['url'];
 
 <div class="sealcertified-div-link">
     <p>
-        Acesse o link para acessar o comprovante desta declaração:
+        Acesse o link do comprovante desta declaração:
         <label for="">
             <a href="<?php echo $url; ?>"
                 class="sealcertified-link">
-                <?php echo $app->createUrl('seal', 'printsealrelation', [$relation->id]); ?>
+                <?php echo $url; ?>
             </a>
         </label>
     </p>

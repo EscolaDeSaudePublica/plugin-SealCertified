@@ -30,7 +30,7 @@ class Controller extends \MapasCulturais\Controller
                 $layout = $terms->term;
             }
         }
-
+        
         $confMpdf = [
             'regs' => '',
             'title' => '',
@@ -44,17 +44,24 @@ class Controller extends \MapasCulturais\Controller
             'nbpgSuffix' => ''
             ]
         ];
-       
+
+        if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'){
+            $url = "https://"; 
+        }else{
+            $url = "http://";   
+        }
+
+        $url .= $_SERVER['HTTP_HOST'].''.$_SERVER['REQUEST_URI'];
+        
         $mpdf = new Mpdf($confMpdf);
         ob_start();
-        //FORMANDO A URL DO LINK NO PDF
-        $urlValidade = $app->config['base.url'].'sealCertified/gerarSelo/'.$data['id'].'/'.$data[0].'/'.$data[1];
          //INSTANCIA DO TIPO ARRAY OBJETO
          $app->view->relObject = new \ArrayObject;
          $app->view->relObject['relation'] = $relation;
-         $app->view->relObject['url'] = $urlValidade;
+         $app->view->relObject['url'] = $url;
 
         $content = $app->view->fetch($confMpdf['template']);
+
 
         $stylesheet = file_get_contents(PLUGINS_PATH.'SealCertified/assets/css/seal-certified--styles.css');
         $footer = '<img src="'.PLUGINS_PATH.'SealCertified/assets/img/sealcertified/rodape.png'.'" style="width: 795px; heigh: 63px">';
@@ -72,7 +79,6 @@ class Controller extends \MapasCulturais\Controller
             ); // margin footer
         $mpdf->WriteHTML(ob_get_clean());
         $mpdf->WriteHTML($stylesheet,1);
-
         $mpdf->WriteHTML($content,2);
         $file_name = 'Ficha_de_inscricao.pdf';
         $mpdf->Output();

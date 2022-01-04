@@ -259,7 +259,7 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
 
         $this->registerMetadata('MapasCulturais\Entities\Seal', 'name_sealcertifiedtwo', [
             'label' => 'Nome da assinatura 2',
-            'type' => 'string',
+            'type' => 'textarea',
             'private' => false,
         ]);
 
