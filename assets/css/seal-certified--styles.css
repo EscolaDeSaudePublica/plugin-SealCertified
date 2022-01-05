@@ -278,9 +278,6 @@ color: rgba(0, 0, 0, 0.6);
     margin-right: 123px;
 }
 .sealcertified-div-link {
-    position: fixed; /* VERIFICAR SE ESTÁ ALTERANDO*/  
-    bottom:3cm; /* VERIFICAR SE ESTÁ ALTERANDO*/ 
-    margin-top: 173px; 
     text-align: center; 
     font-size: 10px;
 }

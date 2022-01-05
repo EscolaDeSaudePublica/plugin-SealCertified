@@ -38,8 +38,12 @@ if(!empty($verified_one)): ?>
     <?php $this->ajaxUploader($entity, "sealcertifiedone", "image-src", "ul.js-sealcertifiedone img.js-sealcertifiedone-img", $template, "", false, false, false); ?>
 </div>
 <label> Escreva o nome da primeira assinatura: </label><br>
-<input name="name_sealcertifiedone" id="name_sealcertifiedone" type="text" class="signature-input" placeholder="Escreva o nome aqui" size="60" value="<?= $entity->name_sealcertifiedone ?? "" ?>" /> <br>
-
- <button class="remove-signature btn btn-danger"><?php i::_e('remover assinatura') ?></button>
+    <p>
+        <textarea id="name_sealcertifiedone" name="name_sealcertifiedone"
+            class="signature-input" 
+            rows="5" cols="33"><?php echo $entity->name_sealcertifiedone ?>
+        </textarea>
+    </p>
+    <button class="remove-signature btn btn-danger"><?php i::_e('remover assinatura') ?></button>
 <hr>
 </div>

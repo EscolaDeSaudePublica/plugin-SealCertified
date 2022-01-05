@@ -28,7 +28,7 @@ endif;
                         ?>" width="50" height="50" class="imagem" /><br>
             <hr size="10" style="width: 50%;">
             <?php if ($relation->seal->name_sealcertifiedtwo !== '') {
-                echo $relation->seal->name_sealcertifiedtwo;
+                echo nl2br($relation->seal->name_sealcertifiedtwo);
             }
             ?>
         </div>
@@ -42,7 +42,7 @@ endif;
                         ?>" width="50" height="50" class="imagem" /><br>
             <hr size="10" style="width: 50%;">
             <?php if ($relation->seal->name_sealcertifiedone !== '') {
-                echo $relation->seal->name_sealcertifiedone;
+                echo nl2br($relation->seal->name_sealcertifiedone);
             }
             ?>
         </div>
@@ -58,7 +58,7 @@ endif;
                                 ?>" class="imagem" width="50" height="50" /> <br>
                     <hr size="10" style="width: 80%;">
                     <?php if ($relation->seal->name_sealcertifiedone !== '') {
-                        echo $relation->seal->name_sealcertifiedone;
+                        echo nl2br($relation->seal->name_sealcertifiedone);
                     } ?>
                 </td>
                 <td></td>
@@ -67,7 +67,7 @@ endif;
                                 ?>" width="50" height="50" class="imagem" /><br>
                     <hr size="10" style="width: 80%;">
                     <?php if ($relation->seal->name_sealcertifiedtwo !== '') {
-                        echo $relation->seal->name_sealcertifiedtwo;
+                        echo nl2br($relation->seal->name_sealcertifiedtwo);
                     }
                     ?>
                 </td>

@@ -3,7 +3,7 @@ require PLUGINS_PATH . 'SealCertified/Entities/SealCertified.php';
 use SealCertified\Entities\SealCertified;
 
 $this->layout = 'nolayout-pdf'; 
-require PLUGINS_PATH.'SealCertified/vendor/autoload.php';
+require PLUGINS_PATH.'PDFReport/vendor/autoload.php';
 $plugin = $app->plugins['SealCertified'];
 $style = $app->view->enqueueStyle('app', 'sealcertified', 'css/seal-certified--styles.css');
 
@@ -13,7 +13,6 @@ $message = $plugin->customCertificateText($relation);
 $this->part('sealcertified/headerOficial');
 // URL DE LINK DE VALIDAÇÃO - MESMA URL
 $url = $app->view->relObject['url'];
-
 ?>
 <div class="container img-container">
     <div style="margin-top: 48px">
@@ -28,34 +27,12 @@ $url = $app->view->relObject['url'];
             echo $message ;            
         } ?>
     </p>
-    <p class="color-label-certified mrg-50-left mrg-50-right">
+    <p class="color-label-certified">
         <?php
             echo "<br/>";           
-            echo 'Fortaleza, '.SealCertified::dateToExtensive();
+            echo 'Fortaleza, '.SealCertified::dateToExtensive().'.';
         ?>
     </p>
 </div>
 
 <?php  $this->part('sealcertified/signature'); ?>
-
-<div class="sealcertified-div-link">
-    <p>
-        Acesse o link para acessar o comprovante desta declaração:
-        <label for="">
-            <a href="<?php echo $url; ?>"
-                class="sealcertified-link">
-                <?php echo $app->createUrl('seal', 'printsealrelation', [$relation->id]); ?>
-            </a>
-        </label>
-    </p>
-
-</div>
-<div class="sealcertified-accredited">
-    <p>
-        Credenciada para ministrar Cursos de Pós-Graduação Lato Sensu – Especialização, Parecer no 0454/2019, de
-        24/09/2019, expedido pela Câmara da Educação Superior e
-        Profissional do Conselho Estadual de Educação do Ceará – CEE, de acordo com o Inciso IV, do Artigo 10, da Lei
-        CNE/MEC no 9.394, de 20 de dezembro de 1996, que
-        Estabelece as Diretrizes e Bases da Educação Nacional.
-    </p>
-</div>
