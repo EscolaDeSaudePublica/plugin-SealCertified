@@ -10,27 +10,27 @@ use Mpdf\Mpdf;
 
 class Controller extends \MapasCulturais\Controller
 {
-
     function GET_gerarSelo() {
-        ini_set('display_errors' , true);
-        $data = $this->data;
-        
+
         $app = App::i();
+
+        $data = $this->data;
+
         $idLayout = $data[1];
+
         $relation = $app->repo('SealRelation')->find($this->data['id']);
-      
+
         $term = $app->repo('Term')->findBy([
             'taxonomy' => 'seal_layout'
         ]);
-        $id = 0;
-        $layout = '';
+
         foreach ($term as $terms) {
             if($idLayout == md5($terms->id) ){
                 $id = $terms->id;
                 $layout = $terms->term;
             }
         }
-        
+
         $confMpdf = [
             'regs' => '',
             'title' => '',
@@ -45,25 +45,18 @@ class Controller extends \MapasCulturais\Controller
             ]
         ];
 
-        if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'){
-            $url = "https://"; 
-        }else{
-            $url = "http://";   
-        }
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https://" : "http://";
 
         $url .= $_SERVER['HTTP_HOST'].''.$_SERVER['REQUEST_URI'];
-        
+
         $mpdf = new Mpdf($confMpdf);
-        ob_start();
-         //INSTANCIA DO TIPO ARRAY OBJETO
-         $app->view->relObject = new \ArrayObject;
-         $app->view->relObject['relation'] = $relation;
-         $app->view->relObject['url'] = $url;
-
-        $content = $app->view->fetch($confMpdf['template']);
-
+        
+        $app->view->relObject = new \ArrayObject;
+        $app->view->relObject['relation'] = $relation;
+        $app->view->relObject['url'] = $url;
 
         $stylesheet = file_get_contents(PLUGINS_PATH.'SealCertified/assets/css/seal-certified--styles.css');
+
         $footer = '
         <div class="sealcertified-div-link">
             <p>Acesse o link do comprovante desta declaração: <a href='.$url.' class="sealcertified-link">'.$url.'</a></p>
@@ -78,24 +71,35 @@ class Controller extends \MapasCulturais\Controller
             </p>
         </div>
         <img src="'.PLUGINS_PATH.'SealCertified/assets/img/sealcertified/rodape.png'.'" style="width: 795px; heigh: 63px">';
+
+        $content = $app->view->fetch($confMpdf['template']);
+
+        $mpdf->writingHTMLfooter = true;
+        $mpdf->SetDisplayMode('fullpage');
+        $mpdf->SetTitle('Mapa da Saúde - Relatório');
+
+        $mpdf->AddPage(
+            '', // L - landscape, P - portrait 
+            '',
+            '',
+            '',
+            '',
+            5, // margin_left
+            5, // margin right
+            10, // margin top
+            20, // margin bottom
+            0, // margin header
+            3
+        ); // margin footer
+        
         $mpdf->SetHTMLFooter($footer);
         $mpdf->SetHTMLFooter($footer, 'E');
-        $mpdf->writingHTMLfooter = true;
-        $mpdf->AddPage('', // L - landscape, P - portrait 
-                '', '', '', '',
-                0, // margin_left
-                0, // margin right
-                0, // margin top
-                0, // margin bottom
-                0, // margin header
-               0
-            ); // margin footer
-        $mpdf->WriteHTML(ob_get_clean());
         $mpdf->WriteHTML($stylesheet,1);
-        $mpdf->WriteHTML($content,2);
-        $file_name = 'Ficha_de_inscricao.pdf';
+        $mpdf->WriteHTML($content, 2);
+
         $mpdf->Output();
         exit;
+       
     }
 
     //Método para renderizar o template
