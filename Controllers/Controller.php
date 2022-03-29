@@ -24,6 +24,8 @@ class Controller extends \MapasCulturais\Controller
             'taxonomy' => 'seal_layout'
         ]);
 
+        $layout = 'template_certificado_padrao';
+
         foreach ($term as $terms) {
             if($idLayout == md5($terms->id) ){
                 $id = $terms->id;
