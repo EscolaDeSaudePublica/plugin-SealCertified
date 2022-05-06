@@ -104,6 +104,34 @@ class Controller extends \MapasCulturais\Controller
        
     }
 
+    function GET_gerarCertificado() {
+        $app = App::i();
+        $data = $this->data;
+
+        $relation = $app->repo('SealRelation')->find($this->data['id']);
+        $app->view->relObject = new \ArrayObject;
+        $app->view->relObject['relation'] = $relation;
+        
+        $content = $app->view->fetch('sealcertified/template_certificado_curso.php');
+        
+        $mpdf = new Mpdf(['orientation' => 'L']);
+        $mpdf->SetImportUse(); // only with mPDF <8.0
+
+        $pagecount = $mpdf->SetSourceFile(PLUGINS_PATH . 'SealCertified/assets/img/sealcertified/certificado_CBVM.pdf');
+        for ($i=1; $i<=($pagecount); $i++) {
+            $mpdf->AddPage();
+            $import_page = $mpdf->ImportPage($i);
+            $mpdf->UseTemplate($import_page);
+            if ($i==1) {
+                $mpdf->WriteHTML($content);
+            }
+        }
+        
+        $mpdf->Output();
+        die;
+       
+    }
+
     //Método para renderizar o template
     public function renderTemplate($file_dir, $file_name){
         $app = App::i();
