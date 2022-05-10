@@ -1,0 +1,93 @@
+body { 
+    font-family: helvetica; 
+}
+
+.img-header {
+    height: 62px;
+    width: 547px;
+    margin-left: 25%; 
+    margin-top: 15px;
+}
+
+.certified-title {
+
+    color: rgba(34, 34, 34, 0.623);
+    font-style: normal;
+    font-size: 24px;
+    line-height: 50px;
+    text-align: center;
+    letter-spacing: 0.5px;  
+    margin-top: 30px;
+}
+
+
+.color-label-certified {
+    width: 100%;   
+    
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 26px;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.sealcertified-img-green {
+    height: 25px;
+    width: 80%;
+    margin-left: 10%; 
+}
+
+.mensagem {
+    width: 80%;
+    margin-left: 10%; 
+}
+
+.table-assinatura {
+    width: 80%;
+    margin: 100px;
+}
+
+.assinatura-certified {
+    font-size: 17px;
+    width: 100%;
+    text-align: center;
+}
+
+.rodape {
+    position: absolute;
+    bottom: 0;
+    background-color: blue;
+    color: #FFF;
+    width: 100%;
+    height: 100px;    
+    text-align: center;
+    line-height: 100px;
+}
+
+.sealcertified-accredited {
+    margin-top: 7px; 
+    margin-left: 80px; 
+    margin-right: 80px; 
+    text-align: center; 
+    font-size: 10px; 
+    color: #000;
+}
+
+.content-page2 {
+    width: 100%;
+}
+
+.table-unidades {
+    background-color: red;
+    float: left;
+    border-collapse: collapse;
+    margin: 60px;
+}
+
+.table-unidades td {
+    padding: 15px;
+    border: 1px dotted;
+}
+

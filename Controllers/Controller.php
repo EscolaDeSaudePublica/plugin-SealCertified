@@ -104,32 +104,84 @@ class Controller extends \MapasCulturais\Controller
        
     }
 
-    function GET_gerarCertificado() {
+    function GET_gerarcertificado() {
+
+        ini_set('display_errors', true);
+        error_reporting(E_ALL);
+
         $app = App::i();
+
         $data = $this->data;
 
         $relation = $app->repo('SealRelation')->find($this->data['id']);
+
         $app->view->relObject = new \ArrayObject;
         $app->view->relObject['relation'] = $relation;
-        
-        $content = $app->view->fetch('sealcertified/template_certificado_curso.php');
-        
-        $mpdf = new Mpdf(['orientation' => 'L']);
-        $mpdf->SetImportUse(); // only with mPDF <8.0
 
-        $pagecount = $mpdf->SetSourceFile(PLUGINS_PATH . 'SealCertified/assets/img/sealcertified/certificado_CBVM.pdf');
-        for ($i=1; $i<=($pagecount); $i++) {
-            $mpdf->AddPage();
-            $import_page = $mpdf->ImportPage($i);
-            $mpdf->UseTemplate($import_page);
-            if ($i==1) {
-                $mpdf->WriteHTML($content);
-            }
-        }
+        $mpdf = new Mpdf();
         
+        $stylesheet = file_get_contents(PLUGINS_PATH.'SealCertified/assets/css/seal-certified-cursos--styles.css');
+        $page1 = $app->view->fetch('sealcertified/template_certificado_padrao_novo-p1');
+        $page2 = $app->view->fetch('sealcertified/template_certificado_padrao_novo-p2');
+
+        $mpdf->writingHTMLfooter = true;
+        $mpdf->SetDisplayMode('fullpage');
+        $mpdf->SetTitle('Mapa da Saúde');
+
+        $mpdf->AddPage(
+            'L', // L - landscape, P - portrait 
+            '',
+            '',
+            '',
+            '',
+            0, // margin_left
+            0, // margin right
+            0, // margin top
+            0, // margin bottom
+            0, // margin header
+            3
+        ); // margin footer
+        
+        $footer = $this->footer();
+        $mpdf->WriteHTML($stylesheet, 1);
+        $mpdf->WriteHTML($page1, 2);
+        $mpdf->SetHTMLFooter($footer);
+        $mpdf->SetHTMLFooter($footer, 'E');
+
+
+        $mpdf->AddPage(
+            'L', // L - landscape, P - portrait 
+            '',
+            '',
+            '',
+            '',
+            0, // margin_left
+            0, // margin right
+            0, // margin top
+            0, // margin bottom
+            0, // margin header
+            3
+        ); // margin footer
+
+        $mpdf->WriteHTML($page2, 2);
         $mpdf->Output();
-        die;
+        exit;
        
+    }
+
+    private function footer()
+    {
+        $footer = '
+        <div class="sealcertified-accredited">
+            <p>
+                Recrendecida para ofertar ministrar Cursos de Pós-Graduação Lato Sensu – Especialização, Parecer no 0454/2019, de
+                24/09/2019, expedido pela Câmara da Educação Superior e Profissional do Conselho Estadual de Educação do Ceará – CEE, de acordo com o Inciso IV, do Artigo 10, da Lei
+                CNE/MEC no 9.394, de 20 de dezembro de 1996, que  Estabelece as Diretrizes e Bases da Educação Nacional.
+            </p>
+        </div>
+        <img src="'.PLUGINS_PATH.'SealCertified/assets/img/sealcertified/rodape.png'.'" style="width: 100%;margin-bottom:-13px;">';
+
+        return $footer;
     }
 
     //Método para renderizar o template
