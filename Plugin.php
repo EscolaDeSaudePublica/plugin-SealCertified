@@ -24,7 +24,7 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
     function getModelData()
     {
         return [
-            'label' => 'Declaração ESP',
+            'label' => 'ESP',
             'name' => 'SealCertified',
             'css' => 'seal-certified--styles.css',
             'js' => 'seal-certified.js',
