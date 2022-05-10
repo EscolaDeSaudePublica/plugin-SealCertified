@@ -81,8 +81,14 @@ $(document).ready(function () {
     
     $("#layout_seal").change(function (e) { 
         e.preventDefault();
-        //$("#layout_seal option:selected").removeAttr( "selected" );
-        console.log($("#layout_seal").val());
+        loadPreview();
+    });
+
+    jQuery(window).load(function () {
+        loadPreview();
+    });
+
+    function loadPreview() {
         var idLayout = $("#layout_seal").val();
         var idSeal = MapasCulturais.entity.id;
         $(".seal-model-preview > img").remove();
@@ -98,6 +104,6 @@ $(document).ready(function () {
                 $(".img-preview-sealcertified").attr('src', img);
             }
         });
-    });
+    }
 
 });
