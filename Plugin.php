@@ -297,7 +297,7 @@ class Plugin extends \SealModelTab\SealModelTemplatePlugin
             $dateFim = $sealRelation->validateDate->format('d/m/Y');
         }
 
-        $nomeEntidade = $sealRelation->owner_relation->name;
+        $nomeEntidade = $sealRelation->owner_relation->name ?? '';
 
         if(!empty($mensagem)){
             $mensagem = str_replace("\t","&nbsp;&nbsp;&nbsp;&nbsp",$mensagem);
