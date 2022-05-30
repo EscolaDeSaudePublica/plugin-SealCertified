@@ -57,30 +57,14 @@
             <?php $this->applyTemplateHook('print-certificate','after',[$relation]); ?>
         </div><!-- fim seal info container -->
         <!-- Data de expiração -->
-            <?php if($seal->validPeriod > 0):?>
+        <?php if($seal->validPeriod > 0):?>
             <div id="expiration-date">
-                <?php if($seal->isExpired()): ?>
+                <?php if($relation->isExpired()): ?>
                     <?php \MapasCulturais\i::_e('<b>Expirado em:</b>'); ?>
-
-                    <?php else:?>
-                        <?php \MapasCulturais\i::_e('<b>Válido até:</b>'); ?>
-                    <?php endif;?>
-                    <?php echo $relation->validateDate->format('d/m/Y'); ?>
-                <?php endif; ?>
-                <?php if($seal->owner->userId <> $app->user->id): ?>
-                    <?php if(!$relation->renovation_request && $relation->isExpired() && $app->config['notifications.seal.toExpire']):?>
-                        <a href="<?php echo $relation->getRequestSealRelationUrl($relation->id);?>" class="btn btn-default js-toggle-edit">
-                            <?php \MapasCulturais\i::_e("Solicitar renovação");?>
-                        </a>
-                    <?php elseif($relation->renovation_request && $relation->isExpired() && $app->config['notifications.seal.toExpire']):?>
-                        <div class="alert warning">
-                            <?php \MapasCulturais\i::_e("Renovação Solicitada");?>
-                        <!--</div>-->
-                    <?php endif;?>
-                <?php elseif($seal->owner->userId == $app->user->id && $relation->isExpired() && $app->config['notifications.seal.toExpire']):?>
-                    <a href="<?php echo $relation->getRenewSealRelationUrl($relation->id);?>" class="btn btn-default js-toggle-edit">
-                        <?php \MapasCulturais\i::_e("Renovar selo");?>
-                    </a>
+                <?php else:?>
+                    <?php \MapasCulturais\i::_e('<b>Válido até:</b>'); ?>
                 <?php endif;?>
+                <?php echo $relation->validateDate->format('d/m/Y'); ?>
             </div>
+        <?php endif; ?>
 </article>
